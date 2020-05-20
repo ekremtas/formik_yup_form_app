@@ -1,261 +1,235 @@
 import React from "react";
-import { Formik } from "formik";
+import { Formik, Form, useField } from "formik";
 import * as Yup from "yup";
 import {
-  Form,
   FormGroup,
   Label,
   Input,
   FormFeedback,
+  FormText,
+  Row,
+  Col,
+  Button,
 } from "reactstrap";
 
+const phoneRegExp = /^5(0[5-7]|[3-5]\d)\d{7}$/gm;
+
 const validationSchema = Yup.object().shape({
-  firstname: Yup.string().required("Firstname is a required field"),
-  lastname: Yup.string().required("Lastname is a required field"),
-  phonenumber: Yup.number().required("Phonenumber is a required field"),
-  email: Yup.string().required("Email is a required field"),
-  url: Yup.string().required("Url is a required field"),
-  company: Yup.string().required("Company is a required field"),
+  firstname: Yup.string().required("Firstname is a required field").min(2),
+  lastname: Yup.string().required("Lastname is a required field").min(2),
+  phonenumber: Yup.string()
+    .matches(phoneRegExp, "Phone number is not valid")
+    .required("Phone Number is a required field"),
+  email: Yup.string().required("Email is a required field").email(),
+  url: Yup.string().required("Url is a required field").url(),
+  company: Yup.string().required("Company is a required field").min(3),
 });
+
+const MyCheckBox = ({ label, ...props }) => {
+  const [field] = useField(props);
+  return (
+    <div>
+      <Input type="checkbox" {...field} {...props} />
+      <Label>{label}</Label>
+    </div>
+  );
+};
+
+const MyTextInput = ({ label, example, ...props }) => {
+  const [field, meta] = useField(props);
+  return (
+    <FormGroup>
+      <Label>{label}</Label>
+      <Input
+        {...field}
+        {...props}
+        invalid={meta.error}
+        valid={meta.error ? false : field.value}
+      />
+      <FormFeedback
+        invalid={meta.error}
+        valid={meta.error ? false : field.value}
+      >
+        {meta.error}
+      </FormFeedback>
+      {example ? <FormText>{example}</FormText> : null}
+    </FormGroup>
+  );
+};
+
+const MyRadioButton = ({ label, ...props }) => {
+  const [field] = useField(props);
+  return (
+    <FormGroup check>
+      <Label check>
+        <Input type="radio" {...field} {...props} /> {label}
+      </Label>
+    </FormGroup>
+  );
+};
 
 const FormikForm = () => {
   return (
-    <div>
-      <Formik
-        initialValues={{
-          firstname: "",
-          lastname: "",
-          phonenumber: "",
-          email: "",
-          url: "",
-          company: "",
-          contactpreference: "",
-        }}
-        validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log(values);
-        }}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isSubmitting,
-          setFieldValue,
-          /* and other goodies */
-        }) => (
-          <Form onSubmit={handleSubmit}>
-            <h2>Contact Us</h2>
-            <div className="row">
-              <div className="col-md-6">
-                <FormGroup>
-                  <Label for="first">First Name</Label>
-                  <Input
-                    type="text"
-                    className="form-control"
-                    placeholder="Enter Firstname"
-                    id="firstname"
-                    name="firstname"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.firstname}
-                    invalid={errors.firstname}
-                    valid={errors.firstname ? false : values.firstname}
-                  />
-                  {errors.firstname && (
-                    <FormFeedback invalid>{errors.firstname}</FormFeedback>
-                  )}
-                </FormGroup>
-              </div>
-              <div className="col-md-6">
-                <FormGroup>
-                  <Label for="last">Last Name</Label>
-                  <Input
-                    type="text"
-                    className="form-control"
-                    placeholder="Enter lastname"
-                    id="lastname"
-                    name="lastname"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.lastname}
-                    invalid={errors.lastname}
-                    valid={errors.lastname ? false : values.lastname}
-                  />
-                  {errors.lastname && (
-                    <FormFeedback invalid>{errors.lastname}</FormFeedback>
-                  )}
-                </FormGroup>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6">
-                <FormGroup>
-                  <Label for="company">Company</Label>
-                  <Input
-                    type="text"
-                    className="form-control"
-                    placeholder="Enter Company"
-                    id="company"
-                    name="company"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.company}
-                    invalid={errors.company}
-                    valid={errors.company ? false : values.company}
-                  />
-                  {errors.company && (
-                    <FormFeedback invalid>{errors.company}</FormFeedback>
-                  )}
-                </FormGroup>
-              </div>
-              <div className="col-md-6">
-                <FormGroup>
-                  <Label for="phone">Phone Number</Label>
-                  <Input
-                    type="number"
-                    className="form-control"
-                    id="phonenumber"
-                    placeholder="Enter Phone"
-                    name="phonenumber"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.phonenumber}
-                    invalid={errors.phonenumber}
-                    valid={errors.phonenumber ? false : values.phonenumber}
-                  />
-                  {errors.phonenumber && (
-                    <FormFeedback invalid>{errors.phonenumber}</FormFeedback>
-                  )}
-                </FormGroup>
-              </div>
-            </div>
-            <div className="row">
-              <div className="col-md-6">
-                <FormGroup>
-                  <Label for="email">Email address</Label>
-                  <Input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    placeholder="Enter Email"
-                    name="email"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.email}
-                    invalid={errors.email}
-                    valid={errors.email ? false : values.email}
-                  />
-                  {errors.email && (
-                    <FormFeedback invalid>{errors.email}</FormFeedback>
-                  )}
-                </FormGroup>
-              </div>
+    <Formik
+      initialValues={{
+        firstname: "",
+        lastname: "",
+        phonenumber: "",
+        email: "",
+        url: "",
+        company: "",
+        contactpreference: "AM",
+        IsSure: false,
+        cookies: [],
+      }}
+      validationSchema={validationSchema}
+      onSubmit={(data, { setSubmitting, resetForm }) => {
+        setSubmitting(true);
 
-              <div className="col-md-6">
-                <FormGroup>
-                  <Label for="url">
-                    Your Website <small>Please include http://</small>
-                  </Label>
-                  <Input
-                    type="url"
-                    className="form-control"
-                    id="url"
-                    placeholder="Enter Url"
-                    name="url"
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    value={values.url}
-                    invalid={errors.url}
-                    valid={errors.url ? false : values.url}
-                  />
-                  {errors.url && (
-                    <FormFeedback invalid>{errors.url}</FormFeedback>
-                  )}
-                </FormGroup>
-              </div>
-            </div>
-            <Label for="contactpreference">
-              When is the best time of day to reach you?
-            </Label>
-            <div className="radio">
-              <Label>
-                <input
-                  type="radio"
+        console.log(data);
+        setTimeout(() => {
+          console.log("sending form");
+          setSubmitting(false);
+          resetForm();
+          alert("Form successfully submitted And Reseted Form");
+        }, 3000);
+      }}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        isSubmitting,
+        setFieldValue,
+        resetForm,
+        /* and other goodies */
+      }) => (
+        <Form>
+          <h2>Contact Us</h2>
+          <Row>
+            <Col md="6">
+              <MyTextInput
+                name="firstname"
+                type="text"
+                label="First Name :"
+                placeholder="Enter First Name"
+              />
+            </Col>
+            <Col md="6">
+              <MyTextInput
+                name="lastname"
+                type="text"
+                label="Last Name :"
+                placeholder="Enter Last Name"
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col md="6">
+              <MyTextInput
+                name="company"
+                type="text"
+                label="Company :"
+                placeholder="Enter Company"
+              />
+            </Col>
+            <Col md="6">
+              <MyTextInput
+                name="phonenumber"
+                type="text"
+                label="Phone Number :"
+                placeholder="Enter Phone Number"
+                example="Example : XXX1232123"
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col md="6">
+              <MyTextInput
+                name="email"
+                type="email"
+                label="Email Adress :"
+                placeholder="Enter Email Adress"
+              />
+            </Col>
+            <Col md="6">
+              <MyTextInput
+                name="url"
+                type="url"
+                label="Your Website :"
+                placeholder="Enter Website"
+                example="Example : https://..."
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col md="6">
+              <Col md="12">
+                <Label for="contactpreference">
+                  When is the best time of day to reach you?
+                </Label>
+              </Col>
+              <Col md="12">
+                <MyRadioButton
                   name="contactpreference"
-                  id="contactpreference"
-                  value="am"
-                  checked={values.contactpreference === "am"}
-                  onChange={() => setFieldValue("contactpreference", "am")}
-                  invalid={errors.contactpreference}
-                    valid={errors.contactpreference ? false : values.contactpreference}
-                  />
-                  {errors.contactpreference && (
-                    <FormFeedback invalid>{errors.contactpreference}</FormFeedback>
-                  )}
-
-                Morning
-              </Label>
-            </div>
-            <div>
-              <Label>
-                <input
-                  type="radio"
-                  name="contactpreference"
-                  id="contactpreference"
-                  value="pm"
-                  checked={values.contactpreference === "pm"}
-                  onChange={() => setFieldValue("contactpreference", "pm")}
+                  value="AM"
+                  label="Morning"
+                  checked={values.contactpreference === "AM"}
                 />
-                Evening
-              </Label>
-            </div>
-            {/* <div className="radio">
-              <label>
-                <input
-                  type="radio"
-                  name="contact-preference"
-                  id="contact-preference"
-                  value="am"
-                  checked
-                >
-                  Morning/>
-                </input>
-              </label>
-            </div>
-            <div className="radio">
-              <label>
-                <input
-                  type="radio"
-                  name="contact-preference"
-                  id="contact-preference"
-                  value="pm"
-                  checked
-                >
-                  Evening />
-                </input>
-              </label>
-            </div> */}
-
+              </Col>
+              <Col md="12">
+                <MyRadioButton
+                  name="contactpreference"
+                  value="PM"
+                  label="Evening"
+                  checked={values.contactpreference === "PM"}
+                />
+              </Col>
+            </Col>
+            <Col md="6">
+              Cookies you love?
+              <hr />
+              <Row>
+                <Col>
+                  <MyCheckBox
+                    name="cookies"
+                    value="chocolate"
+                    label="Chocolate"
+                    checked={values.cookies.includes("chocolate")}
+                  />
+                </Col>
+                <Col>
+                  <MyCheckBox
+                    name="cookies"
+                    value="strawberry"
+                    label="Strawberry"
+                    checked={values.cookies.includes("strawberry")}
+                  />
+                </Col>
+                <Col>
+                  <MyCheckBox
+                    name="cookies"
+                    value="sugar"
+                    label="Sugar"
+                    checked={values.cookies.includes("sugar")}
+                  />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+          <Col>
             <label for="newsletter">
               Would you like to recieve our email newsletter?
             </label>
-            <div className="checkbox">
-              <label>
-                <input type="checkbox" value="Sure!" id="newsletter" /> Sure!
-              </label>
-            </div>
-
-            <button type="submit" className="btn btn-primary">
-              Submit
-            </button>
-          </Form>
-        )}
-      </Formik>
-    </div>
+            <MyCheckBox name="IsSure" label={"IsSure ?"} />
+          </Col>
+          <Button color="success" disabled={isSubmitting} type="submit">
+            Submit
+          </Button>
+          <pre>{JSON.stringify(values, null, 2)}</pre>
+        </Form>
+      )}
+    </Formik>
   );
 };
 
