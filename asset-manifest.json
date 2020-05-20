@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/formik_yup_form_app/static/css/main.27fd15f6.chunk.css",
+    "main.js": "/formik_yup_form_app/static/js/main.11b1dbe5.chunk.js",
+    "main.js.map": "/formik_yup_form_app/static/js/main.11b1dbe5.chunk.js.map",
+    "runtime-main.js": "/formik_yup_form_app/static/js/runtime-main.a9ac7b35.js",
+    "runtime-main.js.map": "/formik_yup_form_app/static/js/runtime-main.a9ac7b35.js.map",
+    "static/css/2.de424728.chunk.css": "/formik_yup_form_app/static/css/2.de424728.chunk.css",
+    "static/js/2.27f53100.chunk.js": "/formik_yup_form_app/static/js/2.27f53100.chunk.js",
+    "static/js/2.27f53100.chunk.js.map": "/formik_yup_form_app/static/js/2.27f53100.chunk.js.map",
+    "index.html": "/formik_yup_form_app/index.html",
+    "precache-manifest.b6814e569054610ed5d65be394a3ed7b.js": "/formik_yup_form_app/precache-manifest.b6814e569054610ed5d65be394a3ed7b.js",
+    "service-worker.js": "/formik_yup_form_app/service-worker.js",
+    "static/css/2.de424728.chunk.css.map": "/formik_yup_form_app/static/css/2.de424728.chunk.css.map",
+    "static/css/main.27fd15f6.chunk.css.map": "/formik_yup_form_app/static/css/main.27fd15f6.chunk.css.map",
+    "static/js/2.27f53100.chunk.js.LICENSE.txt": "/formik_yup_form_app/static/js/2.27f53100.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a9ac7b35.js",
+    "static/css/2.de424728.chunk.css",
+    "static/js/2.27f53100.chunk.js",
+    "static/css/main.27fd15f6.chunk.css",
+    "static/js/main.11b1dbe5.chunk.js"
+  ]
+}
